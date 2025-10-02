@@ -10,7 +10,7 @@ export default function SignInPage() {
   const [error, setError] = useState("")
   const [hasAccount, setHasAccount] = useState(false)
   const [showFingerprintAuth, setShowFingerprintAuth] = useState(false)
-  const [authStep, setAuthStep] = useState<"authenticating" | "success">("authenticating")
+  const [authStep, setAuthStep] = useState<"authenticating" | "success" | "pin-entry">("authenticating")
 
   useEffect(() => {
     // Check if user exists in localStorage
@@ -42,9 +42,9 @@ export default function SignInPage() {
     // Simulate authentication process
     setTimeout(() => {
       setAuthStep("success")
-      // After showing success, redirect to dashboard
+      // After showing success, show PIN entry
       setTimeout(() => {
-        router.push("/dashboard")
+        setAuthStep("pin-entry")
       }, 1500)
     }, 2000)
   }
@@ -124,7 +124,7 @@ export default function SignInPage() {
           ))}
           <button
             onClick={() => handleNumberClick("0")}
-            className="w-20 h-20 rounded-full bg-blue-700/50 hover:bg-blue-700/70 text-2xl font-semibold transition-colors mx-auto"
+            className="w-20 h-20 rounded-full bg-blue-700/50 hover:bg-blue-700/70 text-2xl font-semibold transition-colors mx-auto col-start-2"
           >
             0
           </button>
@@ -151,8 +151,8 @@ export default function SignInPage() {
 
       {showFingerprintAuth && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl w-11/12 max-w-sm p-8 animate-in zoom-in duration-300">
-            {authStep === "authenticating" ? (
+          {authStep === "authenticating" && (
+            <div className="bg-white rounded-3xl w-11/12 max-w-sm p-8 animate-in zoom-in duration-300">
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-6 animate-pulse">
                   <Fingerprint className="w-12 h-12 text-[#0000FF]" />
@@ -160,18 +160,61 @@ export default function SignInPage() {
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">Authenticating fingerprint</h3>
                 <p className="text-gray-600 text-center">checking stored data</p>
               </div>
-            ) : (
-              <div className="flex flex-col items-center">
-                <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6">
-                  <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
+            </div>
+          )}
+
+          {authStep === "success" && (
+            <div className="w-full h-full bg-[#0000FF] flex flex-col items-center justify-start pt-12 px-6 animate-in fade-in duration-300">
+              {/* Success Card */}
+              <div className="bg-white rounded-3xl w-full max-w-md p-8 mb-12 shadow-xl">
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">Authentication Successful</h3>
-                <p className="text-gray-600 text-center">Redirecting to dashboard...</p>
+                <p className="text-gray-600">Fingerprint verified successfully!</p>
               </div>
-            )}
-          </div>
+            </div>
+          )}
+
+          {authStep === "pin-entry" && (
+            <div className="w-full h-full bg-[#0000FF] flex flex-col items-center justify-start pt-12 px-6 animate-in fade-in duration-300">
+              {/* Success Card */}
+              <div className="bg-white rounded-3xl w-full max-w-md p-8 mb-12 shadow-xl">
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">Authentication Successful</h3>
+                <p className="text-gray-600">Fingerprint verified successfully!</p>
+              </div>
+
+              {/* PIN Entry Section */}
+              <div className="flex flex-col items-center w-full">
+                <h2 className="text-4xl font-bold mb-4 text-white">Enter Your Passcode</h2>
+                <p className="text-white/90 mb-12 text-lg">Enter your PIN to access your wallet</p>
+
+                {/* PIN Display */}
+                <div className="flex gap-6 mb-16">
+                  {[0, 1, 2, 3].map((index) => (
+                    <div
+                      key={index}
+                      className={`w-16 h-16 rounded-full border-2 ${
+                        pin.length > index ? "bg-white border-white" : "border-white/50"
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                {error && <p className="text-red-300 mb-4">{error}</p>}
+
+                {/* Number Pad */}
+                <div className="grid grid-cols-3 gap-6 max-w-sm w-full">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                    <button
+                      key={num}
+                      onClick={() => handleNumberClick(num.toString())}
+                      className="w-24 h-24 rounded-full bg-blue-700/40 hover:bg-blue-700/60 text-3xl font-bold transition-colors mx-auto text-white"
+                    >
+                      {num}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
