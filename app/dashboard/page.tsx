@@ -34,24 +34,80 @@ const notifications = [
 
 export default function DashboardPage() {
   const [showAlert, setShowAlert] = useState(true)
-  const [showNotification, setShowNotification] = useState(true)
+  const [dropdownNotifications, setDropdownNotifications] = useState<
+    Array<{ id: number; name: string; amount: string; show: boolean }>
+  >([])
+  const [notificationId, setNotificationId] = useState(0)
   const [showCommunityModal, setShowCommunityModal] = useState(true)
   const [showSideMenu, setShowSideMenu] = useState(false)
   const [currentNotificationIndex, setCurrentNotificationIndex] = useState(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
+      const notification = notifications[currentNotificationIndex]
+      const newNotification = {
+        id: notificationId,
+        name: notification.name,
+        amount: notification.amount,
+        show: true,
+      }
+
+      setDropdownNotifications((prev) => [...prev, newNotification])
+      setNotificationId((prev) => prev + 1)
       setCurrentNotificationIndex((prev) => (prev + 1) % notifications.length)
-      setShowNotification(true)
-    }, 5000)
+
+      // Auto-hide notification after 5 seconds
+      setTimeout(() => {
+        setDropdownNotifications((prev) => prev.map((n) => (n.id === newNotification.id ? { ...n, show: false } : n)))
+        // Remove from array after animation
+        setTimeout(() => {
+          setDropdownNotifications((prev) => prev.filter((n) => n.id !== newNotification.id))
+        }, 300)
+      }, 5000)
+    }, 6000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [currentNotificationIndex, notificationId])
 
-  const currentNotification = notifications[currentNotificationIndex]
+  const removeNotification = (id: number) => {
+    setDropdownNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, show: false } : n)))
+    setTimeout(() => {
+      setDropdownNotifications((prev) => prev.filter((n) => n.id !== id))
+    }, 300)
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Dropdown Notification Container */}
+      <div className="fixed top-20 right-4 z-50 space-y-2 max-w-sm">
+        {dropdownNotifications.map((notification) => (
+          <div
+            key={notification.id}
+            className={`bg-white rounded-lg shadow-lg p-4 flex items-center justify-between border border-gray-200 transition-all duration-300 ${
+              notification.show ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm text-gray-800 font-medium">{notification.name} just withdraw</p>
+                <p className="text-lg text-blue-600 font-bold">₦{notification.amount}</p>
+              </div>
+            </div>
+            <button
+              onClick={() => removeNotification(notification.id)}
+              className="text-gray-400 hover:text-gray-600 flex-shrink-0"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        ))}
+      </div>
+
       {showSideMenu && (
         <>
           {/* Overlay */}
@@ -168,25 +224,6 @@ export default function DashboardPage() {
             </div>
           </div>
           <button onClick={() => setShowAlert(false)} className="text-red-400 hover:text-red-600 flex-shrink-0 ml-2">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-      )}
-
-      {showNotification && (
-        <div className="bg-white px-4 py-3 flex items-center justify-between shadow-sm">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <span className="text-sm text-gray-800">
-              {currentNotification.name} just withdraw{" "}
-              <span className="text-blue-600 font-semibold">₦{currentNotification.amount}</span>
-            </span>
-          </div>
-          <button onClick={() => setShowNotification(false)} className="text-gray-400 hover:text-gray-600">
             <X className="w-5 h-5" />
           </button>
         </div>
