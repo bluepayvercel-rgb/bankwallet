@@ -7,26 +7,33 @@ import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
+const SECRET_BPC_CODE = "BPC202512"
+
 export default function ResetBalancePage() {
   const router = useRouter()
   const [bpcCode, setBpcCode] = useState("")
   const [isResetting, setIsResetting] = useState(false)
+  const [error, setError] = useState("")
 
   const handleReset = () => {
-    if (bpcCode.trim()) {
-      setIsResetting(true)
-      // Simulate reset process
-      setTimeout(() => {
-        // Update balance in localStorage
-        const storedUser = localStorage.getItem("bluepay_user")
-        if (storedUser) {
-          const user = JSON.parse(storedUser)
-          user.balance = 200000
-          localStorage.setItem("bluepay_user", JSON.stringify(user))
-        }
-        router.push("/dashboard")
-      }, 2000)
+    if (bpcCode.trim() !== SECRET_BPC_CODE) {
+      setError("Invalid BPC code. Please try again.")
+      return
     }
+
+    setError("")
+    setIsResetting(true)
+    // Simulate reset process
+    setTimeout(() => {
+      // Update balance in localStorage
+      const storedUser = localStorage.getItem("bluepay_user")
+      if (storedUser) {
+        const user = JSON.parse(storedUser)
+        user.balance = 200000
+        localStorage.setItem("bluepay_user", JSON.stringify(user))
+      }
+      router.push("/dashboard")
+    }, 2000)
   }
 
   return (
@@ -67,10 +74,14 @@ export default function ResetBalancePage() {
             <Input
               type="text"
               value={bpcCode}
-              onChange={(e) => setBpcCode(e.target.value)}
+              onChange={(e) => {
+                setBpcCode(e.target.value)
+                setError("")
+              }}
               placeholder="Enter your BPC code"
               className="w-full text-lg py-6 border-gray-300"
             />
+            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
           </div>
 
           {/* Current Balance */}

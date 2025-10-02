@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, User, Upload, ChevronRight, Sun } from "lucide-react"
+import { ArrowLeft, User, Upload, ChevronRight, Sun, Moon, Monitor, Smartphone, X } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
@@ -13,6 +13,8 @@ export default function ProfilePage() {
     email: "",
   })
   const [profilePicture, setProfilePicture] = useState<string | null>(null)
+  const [showThemeModal, setShowThemeModal] = useState(false)
+  const [currentTheme, setCurrentTheme] = useState<"light" | "dark" | "system" | "device">("light")
 
   useEffect(() => {
     // Load user data from localStorage
@@ -25,13 +27,67 @@ export default function ProfilePage() {
       })
       setProfilePicture(user.profilePicture || null)
     }
+
+    const savedTheme = localStorage.getItem("bluepay_theme") as "light" | "dark" | "system" | "device" | null
+    if (savedTheme) {
+      setCurrentTheme(savedTheme)
+      applyTheme(savedTheme)
+    }
   }, [])
+
+  const applyTheme = (theme: "light" | "dark" | "system" | "device") => {
+    const root = document.documentElement
+
+    if (theme === "dark") {
+      root.classList.add("dark")
+    } else if (theme === "light") {
+      root.classList.remove("dark")
+    } else if (theme === "system") {
+      // Match system preference
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+      if (prefersDark) {
+        root.classList.add("dark")
+      } else {
+        root.classList.remove("dark")
+      }
+    } else if (theme === "device") {
+      // Optimized for device (similar to system for now)
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+      if (prefersDark) {
+        root.classList.add("dark")
+      } else {
+        root.classList.remove("dark")
+      }
+    }
+  }
+
+  const handleThemeSelect = (theme: "light" | "dark" | "system" | "device") => {
+    setCurrentTheme(theme)
+    localStorage.setItem("bluepay_theme", theme)
+    applyTheme(theme)
+    setShowThemeModal(false)
+  }
 
   const handleLogout = () => {
     // Clear localStorage and redirect to home
     localStorage.removeItem("bluepay_user")
     localStorage.removeItem("bluepay_pin")
     router.push("/")
+  }
+
+  const getThemeDisplayName = () => {
+    switch (currentTheme) {
+      case "light":
+        return "Light Mode"
+      case "dark":
+        return "Dark Mode"
+      case "system":
+        return "System Mode"
+      case "device":
+        return "Device Mode"
+      default:
+        return "Light Mode"
+    }
   }
 
   return (
@@ -132,13 +188,16 @@ export default function ProfilePage() {
           <ChevronRight className="w-5 h-5 text-gray-400" />
         </button>
 
-        {/* Theme */}
+        {/* Theme - Updated to show current theme and open modal */}
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
             <Sun className="w-5 h-5 text-gray-600" />
-            <span className="text-gray-800 font-medium">Light Mode</span>
+            <span className="text-gray-800 font-medium">{getThemeDisplayName()}</span>
           </div>
-          <button className="px-4 py-1.5 bg-gray-100 text-gray-600 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors">
+          <button
+            onClick={() => setShowThemeModal(true)}
+            className="px-4 py-1.5 bg-gray-100 text-gray-600 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors"
+          >
             Toggle
           </button>
         </div>
@@ -153,6 +212,119 @@ export default function ProfilePage() {
           Logout
         </Button>
       </div>
+
+      {showThemeModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50 animate-in fade-in duration-200">
+          <div className="bg-white rounded-t-3xl w-full max-w-md p-6 animate-in slide-in-from-bottom duration-300">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-2xl font-bold text-gray-800">Select Theme</h3>
+              <button
+                onClick={() => setShowThemeModal(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-600" />
+              </button>
+            </div>
+            <p className="text-gray-500 mb-6">Choose your preferred app appearance</p>
+
+            {/* Theme Options */}
+            <div className="space-y-3">
+              {/* Light Mode */}
+              <button
+                onClick={() => handleThemeSelect("light")}
+                className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all ${
+                  currentTheme === "light"
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Sun className="w-5 h-5 text-blue-600" />
+                </div>
+                <div className="flex-1 text-left">
+                  <h4 className="font-semibold text-gray-800">Light Mode</h4>
+                  <p className="text-sm text-gray-500">Standard light appearance</p>
+                </div>
+                {currentTheme === "light" && (
+                  <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  </div>
+                )}
+              </button>
+
+              {/* Dark Mode */}
+              <button
+                onClick={() => handleThemeSelect("dark")}
+                className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all ${
+                  currentTheme === "dark"
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Moon className="w-5 h-5 text-indigo-600" />
+                </div>
+                <div className="flex-1 text-left">
+                  <h4 className="font-semibold text-gray-800">Dark Mode</h4>
+                  <p className="text-sm text-gray-500">Easier on the eyes</p>
+                </div>
+                {currentTheme === "dark" && (
+                  <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  </div>
+                )}
+              </button>
+
+              {/* System Mode */}
+              <button
+                onClick={() => handleThemeSelect("system")}
+                className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all ${
+                  currentTheme === "system"
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Monitor className="w-5 h-5 text-purple-600" />
+                </div>
+                <div className="flex-1 text-left">
+                  <h4 className="font-semibold text-gray-800">System Mode</h4>
+                  <p className="text-sm text-gray-500">Match system settings</p>
+                </div>
+                {currentTheme === "system" && (
+                  <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  </div>
+                )}
+              </button>
+
+              {/* Device Mode */}
+              <button
+                onClick={() => handleThemeSelect("device")}
+                className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all ${
+                  currentTheme === "device"
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Smartphone className="w-5 h-5 text-green-600" />
+                </div>
+                <div className="flex-1 text-left">
+                  <h4 className="font-semibold text-gray-800">Device Mode</h4>
+                  <p className="text-sm text-gray-500">Optimized for device</p>
+                </div>
+                {currentTheme === "device" && (
+                  <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  </div>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
