@@ -238,12 +238,12 @@ export default function DashboardPage() {
             </div>
             <span className="text-xs text-gray-700">Support</span>
           </Link>
-          <button className="flex flex-col items-center gap-2">
+          <Link href="/communities" className="flex flex-col items-center gap-2">
             <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
               <Users className="w-6 h-6 text-gray-600" />
             </div>
             <span className="text-xs text-gray-700">Group</span>
-          </button>
+          </Link>
           <Link href="/earn" className="flex flex-col items-center gap-2">
             <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
               <DollarSign className="w-6 h-6 text-gray-600" />
@@ -284,10 +284,10 @@ export default function DashboardPage() {
             <Wallet className="w-6 h-6 text-blue-600" />
             <span className="text-xs text-blue-600 font-medium">Wallet</span>
           </button>
-          <button className="flex flex-col items-center gap-1">
+          <Link href="/communities" className="flex flex-col items-center gap-1">
             <MessageSquare className="w-6 h-6 text-gray-400" />
             <span className="text-xs text-gray-400">Social</span>
-          </button>
+          </Link>
           <button className="flex flex-col items-center -mt-6">
             <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
               <PlusCircle className="w-8 h-8 text-white" />
