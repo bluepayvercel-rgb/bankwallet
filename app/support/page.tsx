@@ -33,7 +33,7 @@ export default function SupportPage() {
                 <p className="text-gray-500 text-sm">Get help via email</p>
               </div>
             </div>
-            <a href="mailto:chinyerepromise381@gmail.com">
+            <a href="mailto:bluepayvercel@gmail.com">
               <Button className="w-full bg-[#0000FF] hover:bg-[#0000DD] text-white py-6 rounded-xl text-base font-semibold">
                 Contact via Email
               </Button>
@@ -96,8 +96,8 @@ export default function SupportPage() {
         {/* Footer Info */}
         <div className="mt-8 text-center space-y-2 mb-20">
           <p className="text-gray-500 text-sm">Available 24/7 for your support needs</p>
-          <a href="mailto:chinyerepromise381@gmail.com" className="text-blue-600 font-medium text-sm block">
-            chinyerepromise381@gmail.com
+          <a href="mailto:bluepayvercel@gmail.com" className="text-blue-600 font-medium text-sm block">
+            bluepayvercel@gmail.com
           </a>
         </div>
       </main>

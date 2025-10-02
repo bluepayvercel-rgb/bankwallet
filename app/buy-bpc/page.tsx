@@ -2,9 +2,10 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { MessageSquare } from "lucide-react"
+import { MessageSquare, ArrowLeft } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 export default function BuyBPCPage() {
   const router = useRouter()
@@ -12,16 +13,37 @@ export default function BuyBPCPage() {
   const [email, setEmail] = useState("")
   const [isProcessing, setIsProcessing] = useState(false)
   const [countdown, setCountdown] = useState(10)
+  const [displayedText, setDisplayedText] = useState("")
+  const [isTyping, setIsTyping] = useState(true)
 
   useEffect(() => {
     // Get user data from localStorage
     const storedUser = localStorage.getItem("bluepay_user")
     if (storedUser) {
       const user = JSON.parse(storedUser)
-      setFullName(user.fullName || "")
+      setFullName(user.fullName || user.name || "")
       setEmail(user.email || "")
     }
   }, [])
+
+  useEffect(() => {
+    if (isTyping && fullName && email) {
+      const fullText = `Welcome back, ${fullName}\nEmail: ${email}`
+      let currentIndex = 0
+
+      const typingInterval = setInterval(() => {
+        if (currentIndex <= fullText.length) {
+          setDisplayedText(fullText.slice(0, currentIndex))
+          currentIndex++
+        } else {
+          setIsTyping(false)
+          clearInterval(typingInterval)
+        }
+      }, 50) // 50ms per character for smooth typing effect
+
+      return () => clearInterval(typingInterval)
+    }
+  }, [isTyping, fullName, email])
 
   useEffect(() => {
     if (isProcessing && countdown > 0) {
@@ -84,33 +106,35 @@ export default function BuyBPCPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-[#0000FF] text-white px-4 py-4">
-        <h1 className="text-xl font-bold">Buy BPC Code</h1>
+      <header className="bg-[#0000FF] text-white px-4 py-4 flex items-center">
+        <Link href="/dashboard" className="text-white">
+          <ArrowLeft className="w-6 h-6" />
+        </Link>
+        <h1 className="text-xl font-bold ml-4">Buy BPC Code</h1>
       </header>
 
       {/* Main Content */}
       <main className="px-4 py-6 max-w-2xl mx-auto">
-        {/* Welcome Section */}
-        <div className="bg-white border-l-4 border-[#0000FF] rounded-lg p-4 mb-6">
-          <p className="text-gray-700 mb-1">
-            Welcome back, <span className="font-semibold text-[#0000FF]">{fullName}</span>
-          </p>
-          <p className="text-sm text-gray-600">
-            Email: <span className="text-[#0000FF]">{email}</span>
-          </p>
+        <div className="bg-white border-l-4 border-[#0000FF] rounded-lg p-4 mb-6 min-h-[80px]">
+          {displayedText.split("\n").map((line, index) => (
+            <p key={index} className={index === 0 ? "text-gray-700 mb-1 font-semibold" : "text-sm text-gray-600"}>
+              {line}
+              {isTyping && index === displayedText.split("\n").length - 1 && (
+                <span className="inline-block w-0.5 h-4 bg-[#0000FF] ml-1 animate-pulse"></span>
+              )}
+            </p>
+          ))}
         </div>
 
         {/* Form */}
         <div className="space-y-6">
-          {/* Amount Field */}
           <div>
             <label className="block text-gray-700 font-medium mb-2">Amount</label>
             <Input
               type="text"
               value="₦6,500"
               disabled
-              className="w-full text-2xl font-semibold text-gray-800 bg-gray-100 border-gray-200"
+              className="w-full text-2xl font-semibold text-black bg-gray-100 border-gray-200"
             />
           </div>
 

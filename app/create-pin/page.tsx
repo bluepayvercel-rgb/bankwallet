@@ -1,13 +1,36 @@
 "use client"
 import { ArrowLeft, Camera, MessageCircle, Fingerprint, X } from "lucide-react"
+import type React from "react"
+
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 
 export default function CreatePinPage() {
   const router = useRouter()
   const [pin, setPin] = useState("")
   const [error, setError] = useState("")
+  const [profilePicture, setProfilePicture] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const result = reader.result as string
+        setProfilePicture(result)
+        // Store in localStorage
+        const userData = localStorage.getItem("bluepay_user")
+        if (userData) {
+          const user = JSON.parse(userData)
+          user.profilePicture = result
+          localStorage.setItem("bluepay_user", JSON.stringify(user))
+        }
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
   const handleNumberClick = (num: string) => {
     if (pin.length < 4) {
@@ -51,12 +74,18 @@ export default function CreatePinPage() {
 
       {/* Main Content */}
       <main className="flex flex-col items-center px-6 py-12">
-        {/* Camera Icon */}
         <div className="relative mb-12">
-          <div className="w-32 h-32 rounded-full bg-blue-600/50 flex items-center justify-center">
-            <Camera className="w-12 h-12 text-white" />
+          <div className="w-32 h-32 rounded-full bg-blue-600/50 flex items-center justify-center overflow-hidden">
+            {profilePicture ? (
+              <img src={profilePicture || "/placeholder.svg"} alt="Profile" className="w-full h-full object-cover" />
+            ) : (
+              <Camera className="w-12 h-12 text-white" />
+            )}
           </div>
-          <div className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-white flex items-center justify-center">
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-white flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors"
+          >
             <div className="w-6 h-6 text-[#0000FF]">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -64,7 +93,8 @@ export default function CreatePinPage() {
                 <line x1="12" y1="3" x2="12" y2="15" />
               </svg>
             </div>
-          </div>
+          </button>
+          <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
         </div>
 
         {/* Title */}
