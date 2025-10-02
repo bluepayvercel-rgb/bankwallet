@@ -7,9 +7,14 @@ export default function Home() {
     <div className="min-h-screen bg-[#0000FF] text-white">
       {/* Header */}
       <header className="px-6 py-6 lg:px-12">
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">BLUEPAY</h1>
-          <span className="text-lg font-medium">2025</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold tracking-tight">BLUEPAY</h1>
+            <span className="text-lg font-medium">2025</span>
+          </div>
+          <Link href="/signin" className="text-base font-medium hover:text-white/80">
+            Sign In
+          </Link>
         </div>
       </header>
 

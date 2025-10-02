@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ArrowLeft, MessageCircle } from "lucide-react"
@@ -23,6 +23,13 @@ export default function SignUpPage() {
     password: "",
     phoneNumber: "",
   })
+
+  useEffect(() => {
+    const existingUser = localStorage.getItem("bluepay_user")
+    if (existingUser) {
+      router.push("/signin")
+    }
+  }, [router])
 
   const validateForm = () => {
     const newErrors = {
@@ -78,8 +85,15 @@ export default function SignUpPage() {
     e.preventDefault()
 
     if (validateForm()) {
-      // Form is valid, redirect to dashboard
-      router.push("/dashboard")
+      const userData = {
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+        phoneNumber: formData.phoneNumber,
+        createdAt: new Date().toISOString(),
+      }
+      localStorage.setItem("bluepay_user", JSON.stringify(userData))
+      router.push("/create-pin")
     }
   }
 
