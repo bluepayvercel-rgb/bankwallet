@@ -356,12 +356,17 @@ export default function DashboardPage() {
             <span className="text-sm text-gray-700 font-medium">Buy BPC</span>
           </Link>
           {/* Watch Service */}
-          <button className="flex flex-col items-center gap-2">
+          <a
+            href="https://t.me/bluepayofficialchannel"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center gap-2"
+          >
             <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
               <Monitor className="w-7 h-7 text-blue-600" />
             </div>
             <span className="text-sm text-gray-700 font-medium">Watch</span>
-          </button>
+          </a>
           <Link href="/airtime" className="flex flex-col items-center gap-2">
             <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center">
               <Phone className="w-7 h-7 text-green-600" />

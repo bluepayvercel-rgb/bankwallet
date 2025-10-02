@@ -69,9 +69,10 @@ export default function ProfilePage() {
   }
 
   const handleLogout = () => {
-    // Clear localStorage and redirect to home
+    // Clear all user-related data from localStorage
     localStorage.removeItem("bluepay_user")
     localStorage.removeItem("bluepay_pin")
+    localStorage.removeItem("bluepay_theme")
     router.push("/")
   }
 
