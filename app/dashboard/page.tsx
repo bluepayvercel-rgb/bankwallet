@@ -74,9 +74,11 @@ export default function DashboardPage() {
             <p className="text-sm mb-2 text-white/90">Available Balance</p>
             <div className="flex items-start justify-between mb-4">
               <h2 className="text-4xl font-bold">₦200,000</h2>
-              <Button className="bg-white text-[#0000FF] hover:bg-white/90 rounded-full px-6 font-semibold">
-                Withdraw
-              </Button>
+              <Link href="/withdraw">
+                <Button className="bg-white text-[#0000FF] hover:bg-white/90 rounded-full px-6 font-semibold">
+                  Withdraw
+                </Button>
+              </Link>
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-white/80">Daily spend target</span>
