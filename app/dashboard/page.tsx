@@ -5,9 +5,7 @@ import {
   Menu,
   Bell,
   User,
-  Clock,
   Phone,
-  Wifi,
   Headphones,
   Users,
   DollarSign,
@@ -16,17 +14,21 @@ import {
   PlusCircle,
   BarChart3,
   X,
+  Monitor,
+  Database,
+  AlertTriangle,
 } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 
 export default function DashboardPage() {
+  const [showAlert, setShowAlert] = useState(true)
   const [showNotification, setShowNotification] = useState(true)
   const [showCommunityModal, setShowCommunityModal] = useState(true)
   const [showSideMenu, setShowSideMenu] = useState(false)
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       {showSideMenu && (
         <>
           {/* Overlay */}
@@ -131,6 +133,19 @@ export default function DashboardPage() {
         </div>
       )}
 
+      {/* Alert Banner */}
+      {showAlert && (
+        <div className="bg-red-50 border-b border-red-100 px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0" />
+            <span className="text-sm text-red-700">Currently experiencing issues with Opay bank transfers</span>
+          </div>
+          <button onClick={() => setShowAlert(false)} className="text-red-400 hover:text-red-600 flex-shrink-0">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+      )}
+
       {/* Notification Banner */}
       {showNotification && (
         <div className="bg-white px-4 py-3 flex items-center justify-between shadow-sm">
@@ -163,134 +178,156 @@ export default function DashboardPage() {
 
       {/* Main Content */}
       <main className="px-4 py-6 max-w-2xl mx-auto">
+        {/* User Greeting Section */}
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
-            <User className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center">
+            <User className="w-7 h-7 text-white" />
           </div>
-          <span className="text-gray-800 font-medium">Hi, Marvelous</span>
-          <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center ml-auto">
-            <User className="w-6 h-6 text-white" />
-          </div>
+          <span className="text-gray-800 text-lg font-medium">Hi, Kash</span>
+          <button className="w-12 h-12 bg-[#0000FF] rounded-full flex items-center justify-center ml-auto">
+            <Bell className="w-6 h-6 text-white" />
+          </button>
         </div>
 
-        <div className="bg-[#0000FF] text-white rounded-3xl p-6 mb-4 relative overflow-hidden">
+        {/* Balance Card */}
+        <div className="bg-[#0000FF] text-white rounded-3xl p-6 mb-6 relative overflow-hidden">
           <div className="relative z-10">
             <p className="text-sm mb-2 text-white/90">Available Balance</p>
-            <div className="flex items-start justify-between mb-4">
+            <div className="flex items-start justify-between mb-6">
               <h2 className="text-4xl font-bold">₦200,000</h2>
               <Link href="/withdraw">
-                <Button className="bg-white text-[#0000FF] hover:bg-white/90 rounded-full px-6 font-semibold">
+                <Button className="bg-white text-[#0000FF] hover:bg-white/90 rounded-xl px-6 py-2 font-semibold">
                   Withdraw
                 </Button>
               </Link>
             </div>
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-white/80">Daily spend target</span>
-              <span className="font-semibold">₦50,000</span>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-white/90">Daily spend target</span>
+                <span className="font-semibold">₦200,000</span>
+              </div>
+              {/* Progress Bar */}
+              <div className="w-full bg-white/20 rounded-full h-2">
+                <div className="bg-white rounded-full h-2 w-1/3"></div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="text-right mb-6">
-          <Link
-            href="#"
-            className="text-blue-600 font-medium text-sm inline-flex items-center gap-1 hover:text-blue-700"
-          >
-            View Recent Activity
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
-
+        {/* Main Service Buttons */}
         <div className="grid grid-cols-4 gap-4 mb-8">
           <button className="flex flex-col items-center gap-2">
-            <div className="w-16 h-16 bg-yellow-400 rounded-2xl flex items-center justify-center shadow-md">
-              <Wallet className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center">
+              <Wallet className="w-7 h-7 text-yellow-600" />
             </div>
-            <span className="text-sm text-gray-700">Buy BPC</span>
+            <span className="text-sm text-gray-700 font-medium">Buy BPC</span>
           </button>
+          {/* Watch Service */}
           <button className="flex flex-col items-center gap-2">
-            <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center shadow-md">
-              <Clock className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
+              <Monitor className="w-7 h-7 text-blue-600" />
             </div>
-            <span className="text-sm text-gray-700">Watch</span>
+            <span className="text-sm text-gray-700 font-medium">Watch</span>
           </button>
           <Link href="/airtime" className="flex flex-col items-center gap-2">
-            <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center shadow-md">
-              <Phone className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center">
+              <Phone className="w-7 h-7 text-green-600" />
             </div>
-            <span className="text-sm text-gray-700">Airtime</span>
+            <span className="text-sm text-gray-700 font-medium">Airtime</span>
           </Link>
-          <button className="flex flex-col items-center gap-2">
-            <div className="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center shadow-md">
-              <Wifi className="w-8 h-8 text-white" />
+          <Link href="/airtime" className="flex flex-col items-center gap-2">
+            <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center">
+              <Database className="w-7 h-7 text-gray-600" />
             </div>
-            <span className="text-sm text-gray-700">Data</span>
-          </button>
+            <span className="text-sm text-gray-700 font-medium">Data</span>
+          </Link>
         </div>
 
         <h3 className="text-lg font-semibold text-gray-800 mb-4">More Services</h3>
+        {/* More Services Section */}
         <div className="grid grid-cols-4 gap-4 mb-8">
           <Link href="/support" className="flex flex-col items-center gap-2">
-            <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+            <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center">
               <Headphones className="w-6 h-6 text-gray-600" />
             </div>
-            <span className="text-xs text-gray-700">Support</span>
+            <span className="text-xs text-gray-700 font-medium">Support</span>
           </Link>
           <Link href="/communities" className="flex flex-col items-center gap-2">
-            <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-              <Users className="w-6 h-6 text-gray-600" />
+            <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center">
+              <Users className="w-6 h-6 text-blue-600" />
             </div>
-            <span className="text-xs text-gray-700">Group</span>
+            <span className="text-xs text-gray-700 font-medium">Group</span>
           </Link>
           <Link href="/earn" className="flex flex-col items-center gap-2">
-            <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-              <DollarSign className="w-6 h-6 text-gray-600" />
+            <div className="w-14 h-14 bg-yellow-100 rounded-2xl flex items-center justify-center">
+              <DollarSign className="w-6 h-6 text-yellow-600" />
             </div>
-            <span className="text-xs text-gray-700">Earn</span>
+            <span className="text-xs text-gray-700 font-medium">Earn</span>
           </Link>
           <button className="flex flex-col items-center gap-2">
-            <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+            <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center">
               <User className="w-6 h-6 text-gray-600" />
             </div>
-            <span className="text-xs text-gray-700">Profile</span>
+            <span className="text-xs text-gray-700 font-medium">Profile</span>
           </button>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-600 to-purple-700 text-white rounded-3xl p-6 mb-20">
-          <h3 className="text-lg font-semibold mb-4">Important Information</h3>
-          <ul className="space-y-3">
-            <li className="flex items-start gap-2">
-              <span className="text-purple-300 mt-1">●</span>
-              <span className="text-sm">How to Buy BPC Code</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-purple-300 mt-1">●</span>
-              <span className="text-sm">Click Buy BPC from dashboard</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-purple-300 mt-1">●</span>
-              <span className="text-sm">Fill details and amount</span>
-            </li>
-          </ul>
+        {/* Important Information Section */}
+        <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-purple-700 text-white rounded-3xl p-6 mb-24">
+          <h3 className="text-xl font-bold mb-6">Important Information</h3>
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-5">
+            <h4 className="font-semibold mb-4 text-lg">How to Buy BPC Code</h4>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 text-sm">
+                  1
+                </div>
+                <span className="text-sm text-white/90">Click "Buy BPC" from dashboard</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 text-sm">
+                  2
+                </div>
+                <span className="text-sm text-white/90">Fill details and amount</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-gray-900">
+                  3
+                </div>
+                <span className="text-sm font-medium">Complete payment for BPC code</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 text-sm">
+                  4
+                </div>
+                <span className="text-sm text-white/90">Use code for airtime & withdrawals</span>
+              </div>
+            </div>
+          </div>
+          {/* Pagination Dots */}
+          <div className="flex items-center justify-center gap-2 mt-4">
+            <div className="w-2 h-2 bg-white rounded-full"></div>
+            <div className="w-2 h-2 bg-white/40 rounded-full"></div>
+            <div className="w-2 h-2 bg-white/40 rounded-full"></div>
+            <div className="w-2 h-2 bg-white/40 rounded-full"></div>
+          </div>
         </div>
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 shadow-lg">
         <div className="max-w-2xl mx-auto flex items-center justify-around">
           <button className="flex flex-col items-center gap-1">
-            <Wallet className="w-6 h-6 text-blue-600" />
-            <span className="text-xs text-blue-600 font-medium">Wallet</span>
+            <Wallet className="w-6 h-6 text-[#0000FF]" />
+            <span className="text-xs text-[#0000FF] font-medium">Wallet</span>
           </button>
           <Link href="/communities" className="flex flex-col items-center gap-1">
             <MessageSquare className="w-6 h-6 text-gray-400" />
             <span className="text-xs text-gray-400">Social</span>
           </Link>
-          <button className="flex flex-col items-center -mt-6">
-            <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
-              <PlusCircle className="w-8 h-8 text-white" />
+          <button className="flex flex-col items-center -mt-8">
+            <div className="w-16 h-16 bg-[#0000FF] rounded-full flex items-center justify-center shadow-xl">
+              <PlusCircle className="w-9 h-9 text-white" />
             </div>
           </button>
           <button className="flex flex-col items-center gap-1">
@@ -303,6 +340,11 @@ export default function DashboardPage() {
           </button>
         </div>
       </nav>
+
+      {/* Floating Chat Button */}
+      <button className="fixed bottom-24 right-6 w-14 h-14 bg-[#0000FF] rounded-full flex items-center justify-center shadow-xl hover:bg-[#0000DD] transition-colors z-40">
+        <MessageSquare className="w-6 h-6 text-white" />
+      </button>
     </div>
   )
 }
