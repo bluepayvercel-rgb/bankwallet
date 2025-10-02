@@ -1,15 +1,26 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, MessageSquare, Copy } from "lucide-react"
+import { ArrowLeft, MessageSquare, Copy, Eye, EyeOff, X } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export default function BankTransferPage() {
   const router = useRouter()
   const [copiedField, setCopiedField] = useState<string | null>(null)
   const [isVerifying, setIsVerifying] = useState(false)
-  const [countdown, setCountdown] = useState(10)
+  const [showStatus, setShowStatus] = useState(false)
+  const [showFeeText, setShowFeeText] = useState(false)
+  const [userEmail, setUserEmail] = useState("")
+  const [countdown, setCountdown] = useState(0)
+
+  useEffect(() => {
+    const userData = localStorage.getItem("bluepay_user")
+    if (userData) {
+      const user = JSON.parse(userData)
+      setUserEmail(user.email || "")
+    }
+  }, [])
 
   const bankDetails = {
     amount: "NGN 6500",
@@ -32,12 +43,82 @@ export default function BankTransferPage() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(interval)
-          router.push("/dashboard")
+          setIsVerifying(false)
+          setShowStatus(true)
           return 0
         }
         return prev - 1
       })
     }, 1000)
+  }
+
+  if (showStatus) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        {/* Sub Header */}
+        <div className="bg-white border-b px-4 py-4 flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-gray-800">Bank Transfer</h2>
+          <button onClick={() => router.push("/dashboard")} className="text-red-500 font-semibold">
+            Cancel
+          </button>
+        </div>
+
+        {/* Main Content */}
+        <main className="flex-1 px-4 py-6 max-w-2xl mx-auto w-full">
+          {/* User Info */}
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-16 h-16 bg-[#3730a3] rounded-full flex items-center justify-center">
+              <span className="text-white text-2xl font-bold">₦</span>
+            </div>
+            <div className="flex-1 text-right">
+              <p className="text-3xl font-bold text-gray-900">NGN 6,500</p>
+              <p className="text-gray-600">{userEmail}</p>
+            </div>
+          </div>
+
+          {/* Instruction Text */}
+          <p className="text-center text-gray-700 mb-8">Proceed to your bank app to complete this Transfer</p>
+
+          {/* Error Status */}
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-32 h-32 bg-red-500 rounded-full flex items-center justify-center mb-6 shadow-lg">
+              <X className="w-16 h-16 text-white stroke-[3]" />
+            </div>
+            <h2 className="text-2xl font-bold text-orange-500 mb-4">PAYMENT NOT CONFIRMED!</h2>
+            <p className="text-gray-600 text-center mb-8">
+              Your payment wasn't confirmed. contact us on email for help
+            </p>
+
+            {/* Hidden Fee Field */}
+            <div className="w-full bg-white rounded-lg border border-gray-300 p-4 flex items-center justify-between mb-4">
+              <div className="flex-1">
+                {showFeeText ? (
+                  <p className="text-gray-900 font-semibold">FEE NOT CONFIRMED</p>
+                ) : (
+                  <p className="text-gray-900 tracking-widest">••••••••••••••••</p>
+                )}
+              </div>
+              <button onClick={() => setShowFeeText(!showFeeText)} className="text-gray-600 hover:text-gray-900">
+                {showFeeText ? <EyeOff className="w-6 h-6" /> : <Eye className="w-6 h-6" />}
+              </button>
+            </div>
+
+            {/* Contact Support Button */}
+            <Button
+              onClick={() => window.open("https://t.me/cashtubspport", "_blank")}
+              className="w-full bg-[#0000FF] hover:bg-[#0000DD] text-white py-6 rounded-xl text-lg font-semibold"
+            >
+              Contact Support
+            </Button>
+          </div>
+        </main>
+
+        {/* Floating Chat Button */}
+        <button className="fixed bottom-6 right-6 w-14 h-14 bg-[#0000FF] rounded-full flex items-center justify-center shadow-xl hover:bg-[#0000DD] transition-colors z-40">
+          <MessageSquare className="w-6 h-6 text-white" />
+        </button>
+      </div>
+    )
   }
 
   if (isVerifying) {
