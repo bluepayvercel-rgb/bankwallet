@@ -8,6 +8,8 @@ import { useState } from "react"
 const networks = ["MTN", "Airtel", "Glo", "9mobile"]
 const dataBundles = ["500MB - ₦500", "1GB - ₦1,000", "2GB - ₦2,000", "5GB - ₦5,000", "10GB - ₦10,000", "20GB - ₦20,000"]
 
+const SECRET_BPC_CODE = "BPC202512"
+
 export default function DataPage() {
   const [selectedNetwork, setSelectedNetwork] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
@@ -19,6 +21,10 @@ export default function DataPage() {
   const handlePurchase = () => {
     if (!selectedNetwork || !phoneNumber || !selectedBundle || !bpcCode) {
       alert("Please fill all fields")
+      return
+    }
+    if (bpcCode !== SECRET_BPC_CODE) {
+      alert("Invalid BPC code. Please enter a valid code.")
       return
     }
     alert("Data purchase successful!")
@@ -76,7 +82,7 @@ export default function DataPage() {
             onChange={(e) => setPhoneNumber(e.target.value)}
             placeholder="Enter 11-digit phone number"
             maxLength={11}
-            className="w-full px-4 py-4 bg-white border-2 border-[#0000FF] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0000FF]"
+            className="w-full px-4 py-4 bg-white border-2 border-[#0000FF] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0000FF] text-gray-900"
           />
         </div>
 
@@ -118,7 +124,7 @@ export default function DataPage() {
             value={bpcCode}
             onChange={(e) => setBpcCode(e.target.value)}
             placeholder="Enter BPC code"
-            className="w-full px-4 py-4 bg-white border-2 border-[#0000FF] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0000FF]"
+            className="w-full px-4 py-4 bg-white border-2 border-[#0000FF] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0000FF] text-gray-900"
           />
         </div>
 
@@ -138,9 +144,7 @@ export default function DataPage() {
 
       {/* Floating Chat Button */}
       <a
-        href="https://t.me/cashtubspport"
-        target="_blank"
-        rel="noopener noreferrer"
+        href="https://t.me/bluepayofficialchannel"
         className="fixed bottom-8 right-8 bg-[#0000FF] hover:bg-[#0000DD] text-white p-4 rounded-full shadow-lg transition-colors z-50"
         aria-label="Open chat"
       >

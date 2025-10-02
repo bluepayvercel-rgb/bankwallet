@@ -15,6 +15,7 @@ export default function BuyBPCPage() {
   const [countdown, setCountdown] = useState(10)
   const [displayedText, setDisplayedText] = useState("")
   const [isTyping, setIsTyping] = useState(true)
+  const [showServicesModal, setShowServicesModal] = useState(false)
 
   useEffect(() => {
     // Get user data from localStorage
@@ -52,13 +53,48 @@ export default function BuyBPCPage() {
       }, 1000)
       return () => clearTimeout(timer)
     } else if (isProcessing && countdown === 0) {
-      router.push("/bank-transfer")
+      setShowServicesModal(true)
     }
   }, [isProcessing, countdown, router])
 
   const handlePay = () => {
     setIsProcessing(true)
     setCountdown(10)
+  }
+
+  const handleServicesModalClose = () => {
+    setShowServicesModal(false)
+    router.push("/bank-transfer")
+  }
+
+  if (showServicesModal) {
+    return (
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-3xl p-8 max-w-md w-full">
+          {/* Placeholder Image */}
+          <div className="w-24 h-24 bg-blue-500 rounded-lg mx-auto mb-6 flex items-center justify-center">
+            <span className="text-white text-sm">imgbb.com</span>
+          </div>
+
+          <h2 className="text-2xl font-bold text-red-500 text-center mb-4">All Services Restored</h2>
+
+          <p className="text-gray-700 text-center mb-6">Opay and all others supported banks are working perfectly.</p>
+
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+            <p className="text-red-600 text-center text-sm">
+              All banking banks including opay are now fully operational and available for your payment.
+            </p>
+          </div>
+
+          <Button
+            onClick={handleServicesModalClose}
+            className="w-full bg-[#0000FF] hover:bg-[#0000DD] text-white py-6 rounded-xl text-lg font-semibold"
+          >
+            I Understand
+          </Button>
+        </div>
+      </div>
+    )
   }
 
   if (isProcessing) {

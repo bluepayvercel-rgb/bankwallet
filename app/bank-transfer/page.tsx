@@ -9,7 +9,6 @@ export default function BankTransferPage() {
   const router = useRouter()
   const [copiedField, setCopiedField] = useState<string | null>(null)
   const [isVerifying, setIsVerifying] = useState(false)
-  const [showServicesModal, setShowServicesModal] = useState(false)
   const [showStatus, setShowStatus] = useState(false)
   const [showFeeText, setShowFeeText] = useState(false)
   const [userEmail, setUserEmail] = useState("")
@@ -45,47 +44,12 @@ export default function BankTransferPage() {
         if (prev <= 1) {
           clearInterval(interval)
           setIsVerifying(false)
-          setShowServicesModal(true)
+          setShowStatus(true)
           return 0
         }
         return prev - 1
       })
     }, 1000)
-  }
-
-  const handleServicesModalClose = () => {
-    setShowServicesModal(false)
-    setShowStatus(true)
-  }
-
-  if (showServicesModal) {
-    return (
-      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl p-8 max-w-md w-full">
-          {/* Placeholder Image */}
-          <div className="w-24 h-24 bg-blue-500 rounded-lg mx-auto mb-6 flex items-center justify-center">
-            <span className="text-white text-sm">imgbb.com</span>
-          </div>
-
-          <h2 className="text-2xl font-bold text-red-500 text-center mb-4">All Services Restored</h2>
-
-          <p className="text-gray-700 text-center mb-6">Opay and all others supported banks are working perfectly.</p>
-
-          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
-            <p className="text-red-600 text-center text-sm">
-              All banking banks including opay are now fully operational and available for your payment.
-            </p>
-          </div>
-
-          <Button
-            onClick={handleServicesModalClose}
-            className="w-full bg-[#0000FF] hover:bg-[#0000DD] text-white py-6 rounded-xl text-lg font-semibold"
-          >
-            I Understand
-          </Button>
-        </div>
-      </div>
-    )
   }
 
   if (showStatus) {
@@ -141,7 +105,7 @@ export default function BankTransferPage() {
 
             {/* Contact Support Button */}
             <Button
-              onClick={() => window.open("https://t.me/cashtubspport", "_blank")}
+              onClick={() => (window.location.href = "https://t.me/bluepayofficialchannel")}
               className="w-full bg-[#0000FF] hover:bg-[#0000DD] text-white py-6 rounded-xl text-lg font-semibold"
             >
               Contact Support

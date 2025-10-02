@@ -51,7 +51,7 @@ export default function SupportPage() {
                 <p className="text-gray-500 text-sm">Chat with us on Telegram</p>
               </div>
             </div>
-            <a href="https://t.me/cashtubspport" target="_blank" rel="noopener noreferrer">
+            <a href="https://t.me/bluepayofficialchannel">
               <Button className="w-full bg-[#0000FF] hover:bg-[#0000DD] text-white py-6 rounded-xl text-base font-semibold">
                 Open Telegram
               </Button>

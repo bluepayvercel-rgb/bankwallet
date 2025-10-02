@@ -7,6 +7,8 @@ import { ArrowLeft, Wallet, MessageSquare, PlusCircle, BarChart3, User } from "l
 import Link from "next/link"
 import { useState } from "react"
 
+const SECRET_BPC_CODE = "BPC202512"
+
 export default function AirtimePage() {
   const [activeTab, setActiveTab] = useState<"airtime" | "data">("airtime")
   const [selectedNetwork, setSelectedNetwork] = useState<string>("mtn")
@@ -32,12 +34,29 @@ export default function AirtimePage() {
   ]
 
   const handleBuyAirtime = () => {
-    // Handle airtime purchase logic here
+    if (!phoneNumber || !amount || !bpcCode) {
+      alert("Please fill all fields")
+      return
+    }
+    if (bpcCode !== SECRET_BPC_CODE) {
+      alert("Invalid BPC code. Please enter a valid code.")
+      return
+    }
     console.log("Purchase:", { selectedNetwork, phoneNumber, amount, bpcCode })
+    alert("Airtime purchase successful!")
   }
 
   const handleBuyData = () => {
+    if (!phoneNumber || !selectedBundle || !bpcCode) {
+      alert("Please fill all fields")
+      return
+    }
+    if (bpcCode !== SECRET_BPC_CODE) {
+      alert("Invalid BPC code. Please enter a valid code.")
+      return
+    }
     console.log("Data Purchase:", { selectedNetwork, phoneNumber, selectedBundle, bpcCode })
+    alert("Data purchase successful!")
   }
 
   return (
@@ -183,7 +202,7 @@ export default function AirtimePage() {
           </button>
           <button className="flex flex-col items-center gap-1">
             <BarChart3 className="w-6 h-6 text-gray-400" />
-            <span className="text-xs text-gray-400">Data</span>
+            <span className="text-xs text-gray-600 font-medium">Data</span>
           </button>
           <button className="flex flex-col items-center gap-1">
             <User className="w-6 h-6 text-gray-400" />
