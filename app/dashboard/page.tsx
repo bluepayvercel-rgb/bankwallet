@@ -78,8 +78,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Dropdown Notification Container */}
-      <div className="fixed top-20 right-4 z-50 space-y-2 max-w-sm">
+      <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 space-y-2 w-full max-w-sm px-4">
         {dropdownNotifications.map((notification) => (
           <div
             key={notification.id}

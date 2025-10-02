@@ -8,6 +8,8 @@ import { useState } from "react"
 export default function BankTransferPage() {
   const router = useRouter()
   const [copiedField, setCopiedField] = useState<string | null>(null)
+  const [isVerifying, setIsVerifying] = useState(false)
+  const [countdown, setCountdown] = useState(10)
 
   const bankDetails = {
     amount: "NGN 6500",
@@ -20,6 +22,64 @@ export default function BankTransferPage() {
     navigator.clipboard.writeText(text)
     setCopiedField(field)
     setTimeout(() => setCopiedField(null), 2000)
+  }
+
+  const handleVerification = () => {
+    setIsVerifying(true)
+    setCountdown(10)
+
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval)
+          router.push("/dashboard")
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+  }
+
+  if (isVerifying) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        {/* Header */}
+        <header className="bg-[#2d3748] text-white px-4 py-4">
+          <h1 className="text-xl font-bold tracking-wider text-center">BLUEPAY</h1>
+        </header>
+
+        {/* Verification Content */}
+        <main className="flex-1 flex flex-col items-center justify-center px-4">
+          {/* Circular Progress with Countdown */}
+          <div className="relative w-32 h-32 mb-8">
+            <svg className="w-32 h-32 transform -rotate-90">
+              <circle cx="64" cy="64" r="56" stroke="#e5e7eb" strokeWidth="8" fill="none" />
+              <circle
+                cx="64"
+                cy="64"
+                r="56"
+                stroke="#0000FF"
+                strokeWidth="8"
+                fill="none"
+                strokeDasharray={`${(countdown / 10) * 351.86} 351.86`}
+                className="transition-all duration-1000"
+              />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-4xl font-bold text-gray-900">{countdown}</span>
+            </div>
+          </div>
+
+          <h2 className="text-3xl font-bold text-gray-900 mb-3 text-center">Verifying your payment</h2>
+          <p className="text-gray-600 text-center max-w-md">Please wait while we confirm your bank transfer...</p>
+        </main>
+
+        {/* Floating Chat Button */}
+        <button className="fixed bottom-6 right-6 w-14 h-14 bg-[#0000FF] rounded-full flex items-center justify-center shadow-xl hover:bg-[#0000DD] transition-colors z-40">
+          <MessageSquare className="w-6 h-6 text-white" />
+        </button>
+      </div>
+    )
   }
 
   return (
@@ -123,7 +183,7 @@ export default function BankTransferPage() {
 
         {/* Confirm Button */}
         <Button
-          onClick={() => router.push("/dashboard")}
+          onClick={handleVerification}
           className="w-full bg-[#0000FF] hover:bg-[#0000DD] text-white py-6 rounded-xl text-lg font-semibold"
         >
           I have made this bank Transfer
