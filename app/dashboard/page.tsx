@@ -23,9 +23,55 @@ import { useState } from "react"
 export default function DashboardPage() {
   const [showNotification, setShowNotification] = useState(true)
   const [showCommunityModal, setShowCommunityModal] = useState(true)
+  const [showSideMenu, setShowSideMenu] = useState(false)
 
   return (
     <div className="min-h-screen bg-gray-100">
+      {showSideMenu && (
+        <>
+          {/* Overlay */}
+          <div className="fixed inset-0 bg-black/50 z-40" onClick={() => setShowSideMenu(false)} />
+
+          {/* Side Menu */}
+          <div className="fixed left-0 top-0 bottom-0 w-80 bg-[#0a1628] z-50 flex flex-col">
+            {/* Logo Section */}
+            <div className="flex-1 flex flex-col items-center justify-center px-8">
+              <div className="mb-8">
+                <div className="text-center mb-4">
+                  <div className="text-6xl font-bold text-[#4169E1] mb-2">B</div>
+                  <div className="text-3xl font-bold">
+                    <span className="text-[#4169E1]">Blue</span>
+                    <span className="text-white">Pay</span>
+                  </div>
+                </div>
+                <div className="text-white text-2xl font-bold text-center tracking-wider">BLUEPAY</div>
+              </div>
+
+              {/* Admin Menu Item */}
+              <button className="w-full flex items-center gap-3 text-white text-xl py-4 px-6 hover:bg-white/10 rounded-lg transition-colors">
+                <MessageSquare className="w-6 h-6" />
+                <span>Admin</span>
+              </button>
+            </div>
+
+            {/* Back to Dashboard Button */}
+            <div className="p-6">
+              <Button
+                onClick={() => setShowSideMenu(false)}
+                className="w-full bg-[#0000FF] hover:bg-[#0000DD] text-white py-6 rounded-2xl text-lg font-semibold"
+              >
+                Back to Dashboard
+              </Button>
+            </div>
+
+            {/* Floating Chat Button */}
+            <button className="absolute bottom-24 right-6 w-14 h-14 bg-[#0000FF] rounded-full flex items-center justify-center shadow-lg hover:bg-[#0000DD] transition-colors">
+              <MessageSquare className="w-6 h-6 text-white" />
+            </button>
+          </div>
+        </>
+      )}
+
       {showCommunityModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-8 max-w-md w-full relative">
@@ -98,7 +144,7 @@ export default function DashboardPage() {
 
       {/* Header */}
       <header className="bg-[#0000FF] text-white px-4 py-4 flex items-center justify-between">
-        <button className="text-white">
+        <button className="text-white" onClick={() => setShowSideMenu(true)}>
           <Menu className="w-6 h-6" />
         </button>
         <h1 className="text-xl font-bold tracking-wider">BLUEPAY</h1>
@@ -109,7 +155,6 @@ export default function DashboardPage() {
 
       {/* Main Content */}
       <main className="px-4 py-6 max-w-2xl mx-auto">
-        {/* User Greeting */}
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
             <User className="w-6 h-6 text-white" />
@@ -120,7 +165,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Balance Card */}
         <div className="bg-[#0000FF] text-white rounded-3xl p-6 mb-4 relative overflow-hidden">
           <div className="relative z-10">
             <p className="text-sm mb-2 text-white/90">Available Balance</p>
@@ -139,7 +183,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* View Recent Activity */}
         <div className="text-right mb-6">
           <Link
             href="#"
@@ -152,7 +195,6 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        {/* Main Services */}
         <div className="grid grid-cols-4 gap-4 mb-8">
           <button className="flex flex-col items-center gap-2">
             <div className="w-16 h-16 bg-yellow-400 rounded-2xl flex items-center justify-center shadow-md">
@@ -180,7 +222,6 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        {/* More Services */}
         <h3 className="text-lg font-semibold text-gray-800 mb-4">More Services</h3>
         <div className="grid grid-cols-4 gap-4 mb-8">
           <button className="flex flex-col items-center gap-2">
@@ -209,7 +250,6 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        {/* Important Information */}
         <div className="bg-gradient-to-br from-purple-600 to-purple-700 text-white rounded-3xl p-6 mb-20">
           <h3 className="text-lg font-semibold mb-4">Important Information</h3>
           <ul className="space-y-3">
