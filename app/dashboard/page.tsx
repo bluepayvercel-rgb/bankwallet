@@ -19,13 +19,36 @@ import {
   AlertTriangle,
 } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+
+const notifications = [
+  { name: "Oluwaseun", amount: "120k" },
+  { name: "Tayo", amount: "200k" },
+  { name: "Chioma", amount: "85k" },
+  { name: "Emeka", amount: "150k" },
+  { name: "Aisha", amount: "95k" },
+  { name: "Kunle", amount: "175k" },
+  { name: "Blessing", amount: "110k" },
+  { name: "Ibrahim", amount: "130k" },
+]
 
 export default function DashboardPage() {
   const [showAlert, setShowAlert] = useState(true)
   const [showNotification, setShowNotification] = useState(true)
   const [showCommunityModal, setShowCommunityModal] = useState(true)
   const [showSideMenu, setShowSideMenu] = useState(false)
+  const [currentNotificationIndex, setCurrentNotificationIndex] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentNotificationIndex((prev) => (prev + 1) % notifications.length)
+      setShowNotification(true)
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const currentNotification = notifications[currentNotificationIndex]
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -133,20 +156,23 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Alert Banner */}
       {showAlert && (
-        <div className="bg-red-50 border-b border-red-100 px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="bg-red-50 border-b border-red-100 px-4 py-3 flex items-center justify-between overflow-hidden">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
             <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0" />
-            <span className="text-sm text-red-700">Currently experiencing issues with Opay bank transfers</span>
+            <div className="overflow-hidden">
+              <div className="animate-marquee whitespace-nowrap text-sm text-red-700">
+                Dear Users we are currently experiencing issues with opay bank transfers Don't use opay to make payments
+                for your BPC-CODE • Dear Users Don't buy BPC-CODE from any Vendors Buy directly from the site •
+              </div>
+            </div>
           </div>
-          <button onClick={() => setShowAlert(false)} className="text-red-400 hover:text-red-600 flex-shrink-0">
+          <button onClick={() => setShowAlert(false)} className="text-red-400 hover:text-red-600 flex-shrink-0 ml-2">
             <X className="w-5 h-5" />
           </button>
         </div>
       )}
 
-      {/* Notification Banner */}
       {showNotification && (
         <div className="bg-white px-4 py-3 flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-2">
@@ -156,7 +182,8 @@ export default function DashboardPage() {
               </svg>
             </div>
             <span className="text-sm text-gray-800">
-              Oluwaseun just withdraw <span className="text-blue-600 font-semibold">₦120k</span>
+              {currentNotification.name} just withdraw{" "}
+              <span className="text-blue-600 font-semibold">₦{currentNotification.amount}</span>
             </span>
           </div>
           <button onClick={() => setShowNotification(false)} className="text-gray-400 hover:text-gray-600">
@@ -216,12 +243,12 @@ export default function DashboardPage() {
 
         {/* Main Service Buttons */}
         <div className="grid grid-cols-4 gap-4 mb-8">
-          <button className="flex flex-col items-center gap-2">
+          <Link href="/buy-bpc" className="flex flex-col items-center gap-2">
             <div className="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center">
               <Wallet className="w-7 h-7 text-yellow-600" />
             </div>
             <span className="text-sm text-gray-700 font-medium">Buy BPC</span>
-          </button>
+          </Link>
           {/* Watch Service */}
           <button className="flex flex-col items-center gap-2">
             <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
