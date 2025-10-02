@@ -465,7 +465,7 @@ export default function DashboardPage() {
           </button>
           <Link href="/data" className="flex flex-col items-center gap-1">
             <BarChart3 className="w-6 h-6 text-gray-400" />
-            <span className="text-xs text-gray-400">Data</span>
+            <span className="text-xs text-gray-600 font-medium">Data</span>
           </Link>
           <Link href="/profile" className="flex flex-col items-center gap-1">
             <User className="w-6 h-6 text-gray-400" />
