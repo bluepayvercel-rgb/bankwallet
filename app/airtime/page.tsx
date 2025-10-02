@@ -33,11 +33,11 @@ export default function AirtimePage() {
 
   const handleBuyAirtime = () => {
     // Handle airtime purchase logic here
-    console.log("[v0] Purchase:", { selectedNetwork, phoneNumber, amount, bpcCode })
+    console.log("Purchase:", { selectedNetwork, phoneNumber, amount, bpcCode })
   }
 
   const handleBuyData = () => {
-    console.log("[v0] Data Purchase:", { selectedNetwork, phoneNumber, selectedBundle, bpcCode })
+    console.log("Data Purchase:", { selectedNetwork, phoneNumber, selectedBundle, bpcCode })
   }
 
   return (
