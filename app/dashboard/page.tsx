@@ -327,12 +327,12 @@ export default function DashboardPage() {
             </div>
             <span className="text-xs text-gray-700 font-medium">Earn</span>
           </Link>
-          <button className="flex flex-col items-center gap-2">
+          <Link href="/profile" className="flex flex-col items-center gap-2">
             <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center">
               <User className="w-6 h-6 text-gray-600" />
             </div>
             <span className="text-xs text-gray-700 font-medium">Profile</span>
-          </button>
+          </Link>
         </div>
 
         {/* Important Information Section */}
@@ -397,10 +397,10 @@ export default function DashboardPage() {
             <BarChart3 className="w-6 h-6 text-gray-400" />
             <span className="text-xs text-gray-400">Data</span>
           </button>
-          <button className="flex flex-col items-center gap-1">
+          <Link href="/profile" className="flex flex-col items-center gap-1">
             <User className="w-6 h-6 text-gray-400" />
             <span className="text-xs text-gray-400">Profile</span>
-          </button>
+          </Link>
         </div>
       </nav>
 
