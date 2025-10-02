@@ -31,7 +31,7 @@ export default function DataPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background dark:bg-gray-900">
       {/* Header */}
       <header className="bg-[#0000FF] text-white px-4 py-4 flex items-center justify-between">
         <Link href="/dashboard" className="text-white">
@@ -45,17 +45,17 @@ export default function DataPage() {
       <main className="px-4 py-6 max-w-2xl mx-auto pb-24">
         {/* Select Network */}
         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-3">Select Network</label>
+          <label className="block text-foreground font-medium mb-3">Select Network</label>
           <div className="relative">
             <button
               onClick={() => setShowNetworkDropdown(!showNetworkDropdown)}
-              className="w-full px-4 py-4 bg-white border-2 border-[#0000FF] rounded-xl text-left flex items-center justify-between text-gray-700"
+              className="w-full px-4 py-4 bg-card border-2 border-[#0000FF] rounded-xl text-left flex items-center justify-between text-foreground"
             >
               <span>{selectedNetwork || "Select Network"}</span>
-              <ChevronDown className="w-5 h-5 text-gray-400" />
+              <ChevronDown className="w-5 h-5 text-muted-foreground" />
             </button>
             {showNetworkDropdown && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-[#0000FF] rounded-xl shadow-lg z-10">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-card border-2 border-[#0000FF] rounded-xl shadow-lg z-50">
                 {networks.map((network) => (
                   <button
                     key={network}
@@ -63,7 +63,7 @@ export default function DataPage() {
                       setSelectedNetwork(network)
                       setShowNetworkDropdown(false)
                     }}
-                    className="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors first:rounded-t-xl last:rounded-b-xl"
+                    className="w-full px-4 py-3 text-left text-foreground hover:bg-accent transition-colors first:rounded-t-xl last:rounded-b-xl"
                   >
                     {network}
                   </button>
@@ -75,30 +75,30 @@ export default function DataPage() {
 
         {/* Phone Number */}
         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-3">Phone Number</label>
+          <label className="block text-foreground font-medium mb-3">Phone Number</label>
           <input
             type="tel"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             placeholder="Enter 11-digit phone number"
             maxLength={11}
-            className="w-full px-4 py-4 bg-white border-2 border-[#0000FF] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0000FF] text-gray-900"
+            className="w-full px-4 py-4 bg-card text-foreground border-2 border-[#0000FF] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0000FF]"
           />
         </div>
 
         {/* Data Bundle */}
         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-3">Data Bundle</label>
+          <label className="block text-foreground font-medium mb-3">Data Bundle</label>
           <div className="relative">
             <button
               onClick={() => setShowBundleDropdown(!showBundleDropdown)}
-              className="w-full px-4 py-4 bg-white border-2 border-[#0000FF] rounded-xl text-left flex items-center justify-between text-gray-700"
+              className="w-full px-4 py-4 bg-card border-2 border-[#0000FF] rounded-xl text-left flex items-center justify-between text-foreground"
             >
               <span>{selectedBundle || "Select Data Bundle"}</span>
-              <ChevronDown className="w-5 h-5 text-gray-400" />
+              <ChevronDown className="w-5 h-5 text-muted-foreground" />
             </button>
             {showBundleDropdown && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-[#0000FF] rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-card border-2 border-[#0000FF] rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto">
                 {dataBundles.map((bundle) => (
                   <button
                     key={bundle}
@@ -106,7 +106,7 @@ export default function DataPage() {
                       setSelectedBundle(bundle)
                       setShowBundleDropdown(false)
                     }}
-                    className="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors first:rounded-t-xl last:rounded-b-xl"
+                    className="w-full px-4 py-3 text-left text-foreground hover:bg-accent transition-colors first:rounded-t-xl last:rounded-b-xl"
                   >
                     {bundle}
                   </button>
@@ -118,19 +118,19 @@ export default function DataPage() {
 
         {/* BPC CODE */}
         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-3">BPC CODE</label>
+          <label className="block text-foreground font-medium mb-3">BPC CODE</label>
           <input
             type="text"
             value={bpcCode}
             onChange={(e) => setBpcCode(e.target.value)}
             placeholder="Enter BPC code"
-            className="w-full px-4 py-4 bg-white border-2 border-[#0000FF] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0000FF] text-gray-900"
+            className="w-full px-4 py-4 bg-card text-foreground border-2 border-[#0000FF] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0000FF]"
           />
         </div>
 
         {/* Available Balance */}
         <div className="mb-6">
-          <p className="text-xl font-bold text-gray-800">Available Balance: ₦200,000</p>
+          <p className="text-xl font-bold text-foreground">Available Balance: ₦200,000</p>
         </div>
 
         {/* Purchase Button */}

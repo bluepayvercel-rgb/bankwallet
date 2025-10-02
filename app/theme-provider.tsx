@@ -29,13 +29,26 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       applyTheme(savedTheme)
     }
 
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "bluepay_theme" && e.newValue) {
+        applyTheme(e.newValue)
+      }
+    }
+
+    window.addEventListener("storage", handleStorageChange)
+
     // Listen for system theme changes if using system/device mode
     if (savedTheme === "system" || savedTheme === "device") {
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
       const handleChange = () => applyTheme(savedTheme)
       mediaQuery.addEventListener("change", handleChange)
-      return () => mediaQuery.removeEventListener("change", handleChange)
+      return () => {
+        mediaQuery.removeEventListener("change", handleChange)
+        window.removeEventListener("storage", handleStorageChange)
+      }
     }
+
+    return () => window.removeEventListener("storage", handleStorageChange)
   }, [])
 
   return <>{children}</>

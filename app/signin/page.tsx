@@ -9,6 +9,8 @@ export default function SignInPage() {
   const [pin, setPin] = useState("")
   const [error, setError] = useState("")
   const [hasAccount, setHasAccount] = useState(false)
+  const [showFingerprintAuth, setShowFingerprintAuth] = useState(false)
+  const [authStep, setAuthStep] = useState<"authenticating" | "success">("authenticating")
 
   useEffect(() => {
     // Check if user exists in localStorage
@@ -31,6 +33,20 @@ export default function SignInPage() {
   const handleDelete = () => {
     setPin(pin.slice(0, -1))
     setError("")
+  }
+
+  const handleFingerprintAuth = () => {
+    setShowFingerprintAuth(true)
+    setAuthStep("authenticating")
+
+    // Simulate authentication process
+    setTimeout(() => {
+      setAuthStep("success")
+      // After showing success, redirect to dashboard
+      setTimeout(() => {
+        router.push("/dashboard")
+      }, 1500)
+    }, 2000)
   }
 
   const handleSubmit = () => {
@@ -113,7 +129,7 @@ export default function SignInPage() {
             0
           </button>
           <button
-            onClick={handleSubmit}
+            onClick={handleFingerprintAuth}
             className="w-20 h-20 rounded-full bg-white hover:bg-white/90 flex items-center justify-center transition-colors mx-auto"
           >
             <Fingerprint className="w-8 h-8 text-[#0000FF]" />
@@ -132,6 +148,32 @@ export default function SignInPage() {
           <button className="text-white font-medium hover:text-white/80">Reset passcode</button>
         </div>
       </main>
+
+      {showFingerprintAuth && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl w-11/12 max-w-sm p-8 animate-in zoom-in duration-300">
+            {authStep === "authenticating" ? (
+              <div className="flex flex-col items-center">
+                <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                  <Fingerprint className="w-12 h-12 text-[#0000FF]" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">Authenticating fingerprint</h3>
+                <p className="text-gray-600 text-center">checking stored data</p>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center">
+                <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                  <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">Authentication Successful</h3>
+                <p className="text-gray-600 text-center">Redirecting to dashboard...</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Floating Chat Button */}
       <a
