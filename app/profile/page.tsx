@@ -12,6 +12,7 @@ export default function ProfilePage() {
     name: "",
     email: "",
   })
+  const [profilePicture, setProfilePicture] = useState<string | null>(null)
 
   useEffect(() => {
     // Load user data from localStorage
@@ -22,6 +23,7 @@ export default function ProfilePage() {
         name: user.name || "",
         email: user.email || "",
       })
+      setProfilePicture(user.profilePicture || null)
     }
   }, [])
 
@@ -46,8 +48,12 @@ export default function ProfilePage() {
       {/* Profile Avatar Section */}
       <div className="flex flex-col items-center py-8">
         <div className="relative mb-4">
-          <div className="w-32 h-32 bg-yellow-500 rounded-full flex items-center justify-center">
-            <User className="w-16 h-16 text-white" />
+          <div className="w-32 h-32 bg-yellow-500 rounded-full flex items-center justify-center overflow-hidden">
+            {profilePicture ? (
+              <img src={profilePicture || "/placeholder.svg"} alt="Profile" className="w-full h-full object-cover" />
+            ) : (
+              <User className="w-16 h-16 text-white" />
+            )}
           </div>
           <button className="absolute bottom-0 right-0 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
             <Upload className="w-5 h-5 text-[#0000FF]" />

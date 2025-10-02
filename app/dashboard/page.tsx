@@ -41,6 +41,12 @@ export default function DashboardPage() {
   const [showCommunityModal, setShowCommunityModal] = useState(true)
   const [showSideMenu, setShowSideMenu] = useState(false)
   const [currentNotificationIndex, setCurrentNotificationIndex] = useState(0)
+  const [userName, setUserName] = useState("")
+  const [userEmail, setUserEmail] = useState("")
+  const [profilePicture, setProfilePicture] = useState<string | null>(null)
+  const [displayedName, setDisplayedName] = useState("")
+  const [displayedInstructions, setDisplayedInstructions] = useState<string[]>(["", "", "", ""])
+  const [isTypingComplete, setIsTypingComplete] = useState(false)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -68,6 +74,66 @@ export default function DashboardPage() {
 
     return () => clearInterval(interval)
   }, [currentNotificationIndex, notificationId])
+
+  useEffect(() => {
+    // Load user data from localStorage
+    const storedUser = localStorage.getItem("bluepay_user")
+    if (storedUser) {
+      const user = JSON.parse(storedUser)
+      setUserName(user.name || "User")
+      setUserEmail(user.email || "")
+      setProfilePicture(user.profilePicture || null)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (userName && !isTypingComplete) {
+      let currentIndex = 0
+      const typingInterval = setInterval(() => {
+        if (currentIndex <= userName.length) {
+          setDisplayedName(userName.slice(0, currentIndex))
+          currentIndex++
+        } else {
+          clearInterval(typingInterval)
+          setIsTypingComplete(true)
+        }
+      }, 100)
+
+      return () => clearInterval(typingInterval)
+    }
+  }, [userName, isTypingComplete])
+
+  useEffect(() => {
+    const instructions = [
+      'Click "Buy BPC" from dashboard',
+      "Fill details and amount",
+      "Complete payment for BPC code",
+      "Use code for airtime & withdrawals",
+    ]
+
+    let instructionIndex = 0
+    let charIndex = 0
+
+    const typingInterval = setInterval(() => {
+      if (instructionIndex < instructions.length) {
+        if (charIndex <= instructions[instructionIndex].length) {
+          setDisplayedInstructions((prev) => {
+            const newInstructions = [...prev]
+            newInstructions[instructionIndex] = instructions[instructionIndex].slice(0, charIndex)
+            return newInstructions
+          })
+          charIndex++
+        } else {
+          instructionIndex++
+          charIndex = 0
+        }
+      } else {
+        clearInterval(typingInterval)
+      }
+    }, 50)
+
+    return () => clearInterval(typingInterval)
+  }, [])
 
   const removeNotification = (id: number) => {
     setDropdownNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, show: false } : n)))
@@ -243,10 +309,14 @@ export default function DashboardPage() {
       <main className="px-4 py-6 max-w-2xl mx-auto">
         {/* User Greeting Section */}
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center">
-            <User className="w-7 h-7 text-white" />
+          <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center overflow-hidden">
+            {profilePicture ? (
+              <img src={profilePicture || "/placeholder.svg"} alt="Profile" className="w-full h-full object-cover" />
+            ) : (
+              <User className="w-7 h-7 text-white" />
+            )}
           </div>
-          <span className="text-gray-800 text-lg font-medium">Hi, Kash</span>
+          <span className="text-gray-800 text-lg font-medium">Hi, {displayedName}</span>
           <button className="w-12 h-12 bg-[#0000FF] rounded-full flex items-center justify-center ml-auto">
             <Bell className="w-6 h-6 text-white" />
           </button>
@@ -342,28 +412,28 @@ export default function DashboardPage() {
             <h4 className="font-semibold mb-4 text-lg">How to Buy BPC Code</h4>
             <div className="space-y-3">
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 text-sm">
+                <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-gray-900">
                   1
                 </div>
-                <span className="text-sm text-white/90">Click "Buy BPC" from dashboard</span>
+                <span className="text-sm text-yellow-300 font-medium min-h-[20px]">{displayedInstructions[0]}</span>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 text-sm">
+                <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-gray-900">
                   2
                 </div>
-                <span className="text-sm text-white/90">Fill details and amount</span>
+                <span className="text-sm text-yellow-300 font-medium min-h-[20px]">{displayedInstructions[1]}</span>
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-gray-900">
                   3
                 </div>
-                <span className="text-sm font-medium">Complete payment for BPC code</span>
+                <span className="text-sm text-yellow-300 font-medium min-h-[20px]">{displayedInstructions[2]}</span>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0 text-sm">
+                <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold text-gray-900">
                   4
                 </div>
-                <span className="text-sm text-white/90">Use code for airtime & withdrawals</span>
+                <span className="text-sm text-yellow-300 font-medium min-h-[20px]">{displayedInstructions[3]}</span>
               </div>
             </div>
           </div>
@@ -393,10 +463,10 @@ export default function DashboardPage() {
               <PlusCircle className="w-9 h-9 text-white" />
             </div>
           </button>
-          <button className="flex flex-col items-center gap-1">
+          <Link href="/data" className="flex flex-col items-center gap-1">
             <BarChart3 className="w-6 h-6 text-gray-400" />
             <span className="text-xs text-gray-400">Data</span>
-          </button>
+          </Link>
           <Link href="/profile" className="flex flex-col items-center gap-1">
             <User className="w-6 h-6 text-gray-400" />
             <span className="text-xs text-gray-400">Profile</span>
