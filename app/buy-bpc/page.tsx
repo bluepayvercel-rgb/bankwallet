@@ -76,13 +76,13 @@ export default function BuyBPCPage() {
             <span className="text-white text-sm">imgbb.com</span>
           </div>
 
-          <h2 className="text-2xl font-bold text-red-500 text-center mb-4">All Services Restored</h2>
+          <h2 className="text-2xl font-bold text-red-500 text-center mb-4">DO NOT USE OPAY</h2>
 
-          <p className="text-gray-700 text-center mb-6">Opay and all others supported banks are working perfectly.</p>
+          <p className="text-gray-700 text-center mb-6">TO PAY FOR YOUR BPC CODE OPAY SERVICES IS DOWN FOR NOW</p>
 
           <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
             <p className="text-red-600 text-center text-sm">
-              All banking banks including opay are now fully operational and available for your payment.
+              Please use other supported banks for your payment. Opay services are temporarily unavailable.
             </p>
           </div>
 

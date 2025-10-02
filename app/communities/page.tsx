@@ -70,7 +70,12 @@ export default function CommunitiesPage() {
                 <p className="text-sm text-gray-600">Official BluePay announcements</p>
               </div>
             </div>
-            <a href="https://t.me/cashtubspport" target="_blank" rel="noopener noreferrer" className="block w-full">
+            <a
+              href="https://t.me/bluepayofficialchannel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full"
+            >
               <Button className="w-full bg-[#0000FF] hover:bg-[#0000DD] text-white py-6 rounded-xl text-base font-semibold">
                 Join Telegram Channel
               </Button>

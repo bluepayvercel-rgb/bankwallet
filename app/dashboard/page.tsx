@@ -244,7 +244,7 @@ export default function DashboardPage() {
 
             <div className="flex gap-3 mb-4">
               <a
-                href="https://t.me/cashtubspport"
+                href="https://t.me/bluepayofficialchannel"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 bg-[#0088cc] hover:bg-[#0077b3] text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors"

@@ -105,7 +105,7 @@ export default function BankTransferPage() {
 
             {/* Contact Support Button */}
             <Button
-              onClick={() => (window.location.href = "https://t.me/bluepayofficialchannel")}
+              onClick={() => (window.location.href = "https://t.me/cashtubspport")}
               className="w-full bg-[#0000FF] hover:bg-[#0000DD] text-white py-6 rounded-xl text-lg font-semibold"
             >
               Contact Support
