@@ -112,12 +112,12 @@ export default function DashboardPage() {
             </div>
             <span className="text-sm text-gray-700">Watch</span>
           </button>
-          <button className="flex flex-col items-center gap-2">
+          <Link href="/airtime" className="flex flex-col items-center gap-2">
             <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center shadow-md">
               <Phone className="w-8 h-8 text-white" />
             </div>
             <span className="text-sm text-gray-700">Airtime</span>
-          </button>
+          </Link>
           <button className="flex flex-col items-center gap-2">
             <div className="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center shadow-md">
               <Wifi className="w-8 h-8 text-white" />
