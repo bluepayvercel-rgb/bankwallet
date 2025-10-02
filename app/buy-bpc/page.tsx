@@ -30,8 +30,7 @@ export default function BuyBPCPage() {
       }, 1000)
       return () => clearTimeout(timer)
     } else if (isProcessing && countdown === 0) {
-      // After 10 seconds, redirect to dashboard
-      router.push("/dashboard")
+      router.push("/bank-transfer")
     }
   }, [isProcessing, countdown, router])
 
