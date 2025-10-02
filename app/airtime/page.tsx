@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, Wallet, MessageSquare, PlusCircle, BarChart3, User } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
@@ -11,6 +12,7 @@ export default function AirtimePage() {
   const [selectedNetwork, setSelectedNetwork] = useState<string>("mtn")
   const [phoneNumber, setPhoneNumber] = useState("")
   const [amount, setAmount] = useState("")
+  const [selectedBundle, setSelectedBundle] = useState("")
   const [bpcCode, setBpcCode] = useState("")
 
   const networks = [
@@ -20,9 +22,22 @@ export default function AirtimePage() {
     { id: "9mobile", name: "9mobile", logo: "/9mobile-logo.jpg" },
   ]
 
+  const dataBundles = [
+    { value: "1gb-300", label: "1GB - ₦300" },
+    { value: "2gb-600", label: "2GB - ₦600" },
+    { value: "5gb-1500", label: "5GB - ₦1,500" },
+    { value: "10gb-3000", label: "10GB - ₦3,000" },
+    { value: "20gb-5000", label: "20GB - ₦5,000" },
+    { value: "50gb-10000", label: "50GB - ₦10,000" },
+  ]
+
   const handleBuyAirtime = () => {
     // Handle airtime purchase logic here
     console.log("[v0] Purchase:", { selectedNetwork, phoneNumber, amount, bpcCode })
+  }
+
+  const handleBuyData = () => {
+    console.log("[v0] Data Purchase:", { selectedNetwork, phoneNumber, selectedBundle, bpcCode })
   }
 
   return (
@@ -97,20 +112,37 @@ export default function AirtimePage() {
           />
         </div>
 
-        {/* Amount */}
-        <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-3">Amount</label>
-          <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">₦</span>
-            <Input
-              type="number"
-              placeholder="Enter amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              className="h-12 rounded-xl border-gray-200 bg-white pl-8"
-            />
+        {activeTab === "airtime" ? (
+          <div className="mb-6">
+            <label className="block text-gray-700 font-medium mb-3">Amount</label>
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">₦</span>
+              <Input
+                type="number"
+                placeholder="Enter amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="h-12 rounded-xl border-gray-200 bg-white pl-8"
+              />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="mb-6">
+            <label className="block text-gray-700 font-medium mb-3">Select Data Bundle</label>
+            <Select value={selectedBundle} onValueChange={setSelectedBundle}>
+              <SelectTrigger className="h-12 rounded-xl border-gray-200 bg-white">
+                <SelectValue placeholder="Choose data bundle" />
+              </SelectTrigger>
+              <SelectContent>
+                {dataBundles.map((bundle) => (
+                  <SelectItem key={bundle.value} value={bundle.value}>
+                    {bundle.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
         {/* BPC Code */}
         <div className="mb-8">
@@ -125,12 +157,11 @@ export default function AirtimePage() {
           <p className="text-sm text-gray-500 mt-2">Enter your BPC code to authorize this purchase</p>
         </div>
 
-        {/* Buy Button */}
         <Button
-          onClick={handleBuyAirtime}
+          onClick={activeTab === "airtime" ? handleBuyAirtime : handleBuyData}
           className="w-full h-14 bg-[#0000FF] hover:bg-blue-700 text-white rounded-full text-lg font-semibold"
         >
-          Buy Airtime
+          {activeTab === "airtime" ? "Buy Airtime" : "Buy Data Bundle"}
         </Button>
       </main>
 

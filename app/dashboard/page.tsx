@@ -141,12 +141,12 @@ export default function DashboardPage() {
             </div>
             <span className="text-xs text-gray-700">Group</span>
           </button>
-          <button className="flex flex-col items-center gap-2">
+          <Link href="/earn" className="flex flex-col items-center gap-2">
             <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
               <DollarSign className="w-6 h-6 text-gray-600" />
             </div>
             <span className="text-xs text-gray-700">Earn</span>
-          </button>
+          </Link>
           <button className="flex flex-col items-center gap-2">
             <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
               <User className="w-6 h-6 text-gray-600" />
