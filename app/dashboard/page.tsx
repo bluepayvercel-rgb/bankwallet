@@ -47,11 +47,19 @@ export default function DashboardPage() {
                 <div className="text-white text-2xl font-bold text-center tracking-wider">BLUEPAY</div>
               </div>
 
-              {/* Admin Menu Item */}
-              <button className="w-full flex items-center gap-3 text-white text-xl py-4 px-6 hover:bg-white/10 rounded-lg transition-colors">
-                <MessageSquare className="w-6 h-6" />
-                <span>Admin</span>
-              </button>
+              <div className="w-full space-y-2">
+                <Link
+                  href="/support"
+                  className="w-full flex items-center gap-3 text-white text-xl py-4 px-6 hover:bg-white/10 rounded-lg transition-colors"
+                >
+                  <Headphones className="w-6 h-6" />
+                  <span>Support</span>
+                </Link>
+                <button className="w-full flex items-center gap-3 text-white text-xl py-4 px-6 hover:bg-white/10 rounded-lg transition-colors">
+                  <MessageSquare className="w-6 h-6" />
+                  <span>Admin</span>
+                </button>
+              </div>
             </div>
 
             {/* Back to Dashboard Button */}
@@ -224,12 +232,12 @@ export default function DashboardPage() {
 
         <h3 className="text-lg font-semibold text-gray-800 mb-4">More Services</h3>
         <div className="grid grid-cols-4 gap-4 mb-8">
-          <button className="flex flex-col items-center gap-2">
+          <Link href="/support" className="flex flex-col items-center gap-2">
             <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
               <Headphones className="w-6 h-6 text-gray-600" />
             </div>
             <span className="text-xs text-gray-700">Support</span>
-          </button>
+          </Link>
           <button className="flex flex-col items-center gap-2">
             <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
               <Users className="w-6 h-6 text-gray-600" />
